@@ -37,3 +37,27 @@ async def test_db_initial_data(service_client):
     )
     assert response.status == 200
     assert response.text == 'Hi again, user-from-initial_data.sql!\n'
+
+
+async def test_post_review(service_client):
+    response = await service_client.post(
+        '/v1/post-review',
+        json={
+            'username': 'vasya',
+            'game': 'gta5',
+            'rating': 10,
+            "text": 'vkusnyatina'
+        }
+    )
+    assert response.status == 200
+    assert len(response.text) > 10
+
+@pytest.mark.pgsql('db_1', files=['initial_data_reviews.sql'])
+async def test_get_all_reviews(service_client):
+    response = await service_client.get(
+        '/v1/get-reviews',
+        params={
+        }
+    )
+    assert response.status == 200
+    assert len(response.json()) == 4

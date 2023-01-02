@@ -9,9 +9,14 @@ add_subdirectory(third_party/userver)
 
 # Common sources
 add_library(${PROJECT_NAME}_objs OBJECT
-    src/hello.hpp
-    src/hello.cpp
-)
+    	src/hello.hpp
+    	src/hello.cpp
+		src/v1/post-a-review/view.cpp
+		src/v1/post-a-review/view.hpp
+		src/v1/get-reviews/view.cpp
+		src/v1/get-reviews/view.hpp
+		src/models/review.cpp
+		src/models/review.hpp)
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver-core userver-postgresql)
 
 
