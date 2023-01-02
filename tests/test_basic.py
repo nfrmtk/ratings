@@ -62,3 +62,18 @@ async def test_get_all_reviews(service_client):
     )
     assert response.status == 200
     assert len(response.json()) == 4
+
+
+@pytest.mark.pgsql('db_1', files=['initial_data_reviews.sql'])
+async def test_post_already_in_db(service_client):
+    response = await service_client.post(
+        '/v1/post-review',
+        json={
+            'username': 'grebnev2003',
+            'game': 'gta',
+            'rating': 1,
+            "text": 'net na telefone'
+        }
+    )
+    assert response.status == 200
+    assert response.text[0:10:1] == '1970-01-01'
