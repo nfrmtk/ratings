@@ -52,6 +52,7 @@ async def test_post_review(service_client):
     assert response.status == 200
     assert len(response.text) > 10
 
+
 @pytest.mark.pgsql('db_1', files=['initial_data_reviews.sql'])
 async def test_get_all_reviews(service_client):
     response = await service_client.get(
