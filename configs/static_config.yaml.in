@@ -70,3 +70,15 @@ components_manager:
 
         dns-client:
             fs-task-processor: fs-task-processor
+
+        handler-post-review:
+            path: /v1/post-review
+            method: POST
+            task_processor: main-task-processor
+
+
+        handler-get-reviews:
+            path: /v1/get-reviews
+            method: GET
+            task_processor: main-task-processor
+
