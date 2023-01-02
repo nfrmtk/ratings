@@ -3,9 +3,6 @@ name: CI
 'on':
     pull_request:
     push:
-        branches:
-          - develop
-
 env:
     UBSAN_OPTIONS: print_stacktrace=1
 
