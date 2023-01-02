@@ -1,0 +1,63 @@
+openapi: 3.0.3
+info:
+  title: ratings API
+  description: ratings API
+  version: 1.0.0
+servers:
+  - url: 'http://94.103.91.189:8081'
+components:
+  schemas:
+    review:
+      type: object
+      properties:
+        username:
+          required: true
+          type: string
+        game:
+          required: true
+          type: string
+        rating:
+          required: true
+          type: integer
+        text:
+          required: false
+          type: string
+paths:
+  /post-review:
+    post:
+      description: creates new review
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/review'
+      responses:
+        200:
+          description: OK, returns time of database row creation
+          content:
+            text/plain:
+              schema:
+                description: timing of creation
+                type: string
+  /get-reviews:
+    get:
+      description: returns all reviews matching request
+      parameters:
+        - name: username
+          in: header
+          description: username to search for
+          required: false
+        - name: game
+          in: header
+          description: game to search for
+          required: false
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/review'
