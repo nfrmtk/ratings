@@ -36,6 +36,7 @@ class PostReview : public userver::server::handlers::HttpHandlerBase {
                       ->Execute(pg::ClusterHostType::kMaster,
                                 "INSERT INTO ratings_schema.reviews(username, "
                                 "game, rating, review) VALUES($1, $2, $3, $4) "
+                                "ON CONFLICT DO NOTHING "
                                 "RETURNING reviews.created_at",
                                 username, game, rating, text);
     pg::TimePointTz timing;
