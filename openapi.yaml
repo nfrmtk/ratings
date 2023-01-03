@@ -4,7 +4,7 @@ info:
   description: ratings API
   version: 1.0.0
 servers:
-  - url: 'http://94.103.91.189:8081'
+  - url: 'http://94.103.91.189:8080'
 components:
   schemas:
     review:
@@ -23,7 +23,7 @@ components:
           required: false
           type: string
 paths:
-  /post-review:
+  /v1/post-review:
     post:
       description: creates new review
       requestBody:
@@ -40,7 +40,7 @@ paths:
               schema:
                 description: timing of creation
                 type: string
-  /get-reviews:
+  /v1/get-reviews:
     get:
       description: returns all reviews matching request
       parameters:
