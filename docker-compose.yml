@@ -19,6 +19,7 @@ services:
     ratings_service-container:
         image: ghcr.io/userver-framework/docker-userver-build-base:v1a
         privileged: true
+        restart: always
         environment:
           - POSTGRES_DB=ratings_service_db-1
           - POSTGRES_USER=user
