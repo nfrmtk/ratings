@@ -5,6 +5,7 @@ info:
   version: 1.0.0
 servers:
   - url: 'http://94.103.91.189:8080'
+  - url: 'http://185.231.155.86:8080'
 components:
   schemas:
     review:
@@ -45,11 +46,11 @@ paths:
       description: returns all reviews matching request
       parameters:
         - name: username
-          in: header
+          in: query
           description: username to search for
           required: false
         - name: game
-          in: header
+          in: query
           description: game to search for
           required: false
       responses:
