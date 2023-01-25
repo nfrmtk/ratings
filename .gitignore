@@ -11,3 +11,5 @@ cmake-build-*
 Testing/
 configs/static_config.yaml
 .DS_Store
+stderr.txt
+stdout.txt
