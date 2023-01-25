@@ -1,10 +1,8 @@
 # ratings_service
 
+Simple C++ service that uses [userver framework](https://github.com/userver-framework/userver) with PostgreSQL.
 
-
-
-Simple С++ service that uses [userver framework](https://github.com/userver-framework/userver) with PostgreSQL.
-See openapi.yaml for functionality description.
+See [openapi](openapi.yaml) for functionality description
 
 
 ## Download and Build
