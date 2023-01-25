@@ -50,7 +50,7 @@ async def test_post_review(service_client):
         }
     )
     assert response.status == 200
-    assert len(response.text) > 10
+    assert response.text[0:10:1] == '1970-01-01'
 
 
 @pytest.mark.pgsql('db_1', files=['initial_data_reviews.sql'])
