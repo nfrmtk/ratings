@@ -1,0 +1,30 @@
+.wrap {
+    width: 100%;
+    height: 100vh;
+  }
+  
+  .container {
+    width: 100%;
+    height: 100%;
+    
+  }
+
+  .heading {
+    font-size: 32px;
+    line-height: 48px;
+    text-align: center;
+    color: #2b2b2b;
+  }
+
+  .logo {
+    padding-top: 5vh;
+    padding-bottom: 5vh;
+  }
+
+  .staic {
+    display: flex;
+    justify-content: space-around;
+  }
+  .result {
+
+  }
