@@ -13,6 +13,7 @@ const FIELDS = {
 };
 
 const Main = () => {
+  
   const { USERNAME, GAME, RATING, REVIEW, } = FIELDS;
 
   const [values, setValues] = useState({ [USERNAME]: "", [GAME]: "", [RATING]: "", [REVIEW]: "" });
@@ -25,21 +26,24 @@ const Main = () => {
     const isDisabled = Object.values(values).some((v) => !v);
 
     if (isDisabled) {
-      e.preventDefault();
+      e.preventDefault("not");
     }
     else{
-      const user = values;
-       
-    axios.post(`https://94.103.91.189:8081`, { user })
+      const url = "v1/post-review";
+      const user = {};
+
+      user.username = values.username;
+      user.game = values.game;
+      user.rating = +values.rating;
+      user.text = values.text;
+
+    axios.post(url, user)
     .then(res => {
       alert("Спасибо за ваш отзыв");
-      console.log(res);            //Delet
-      console.log(res.data);
     })
     }
   };
-  console.log(values);
-  
+
   return (
     <div className={styles.wrap}>
       <div className={styles.container}>
