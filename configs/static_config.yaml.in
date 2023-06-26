@@ -72,13 +72,17 @@ components_manager:
             fs-task-processor: fs-task-processor
 
         handler-post-review:
-            path: /v1/post-review
+            path: /v1/  review
             method: POST
             task_processor: main-task-processor
 
 
         handler-get-reviews:
-            path: /v1/get-reviews
+            path: /v1/reviews
             method: GET
             task_processor: main-task-processor
 
+        handler-update-review:
+            path: /v1/review
+            method: PATCH
+            task_processor: main-task-processor

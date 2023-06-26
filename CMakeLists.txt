@@ -16,7 +16,7 @@ add_library(${PROJECT_NAME}_objs OBJECT
 		src/v1/get-reviews/view.cpp
 		src/v1/get-reviews/view.hpp
 		src/models/review.cpp
-		src/models/review.hpp)
+		src/models/review.hpp src/v1/update-review/view.cpp src/v1/update-review/view.hpp)
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver-core userver-postgresql)
 
 
