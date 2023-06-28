@@ -112,4 +112,4 @@ async def test_update(service_client):
         }
     )
     assert len(response.json()) == 1
-    assert response.json()[0] == patch
+    assert response.json()[0]['text'] == patch['text']

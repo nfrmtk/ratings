@@ -45,11 +45,13 @@ class PostReview : public userver::server::handlers::HttpHandlerBase {
                              "ON CONFLICT DO NOTHING "
                              "RETURNING reviews.created_at",
                              email, game, rating, text);
-    if (result.IsEmpty()){
-      request.GetHttpResponse().SetStatus(userver::server::http::HttpStatus::kConflict);
+    if (result.IsEmpty()) {
+      request.GetHttpResponse().SetStatus(
+          userver::server::http::HttpStatus::kConflict);
       return {};
     }
-    return userver::utils::datetime::LocalTimezoneTimestring(result.AsSingleRow<pg::TimePointTz>(pg::kFieldTag).GetUnderlying());
+    return userver::utils::datetime::LocalTimezoneTimestring(
+        result.AsSingleRow<pg::TimePointTz>(pg::kFieldTag).GetUnderlying());
   }
 
  private:
