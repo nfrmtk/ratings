@@ -15,7 +15,7 @@ form = {
 async def register(service_client):
     return await service_client.post(
         '/v1/register',
-        form=form
+        data=form
     )
 
 
@@ -57,7 +57,7 @@ async def test_post_review(service_client):
     assert response.text[0:10:1] != '1970-01-01'
 
 
-@pytest.mark.pgsql('db_1', files=['initial_data_signed.sql'])
+@pytest.mark.pgsql('db_1', files=['initial_data_signed_with_reviews.sql'])
 async def test_get_all_reviews(service_client):
     response = await service_client.get(
         '/v1/reviews',
@@ -71,7 +71,7 @@ async def test_get_all_reviews(service_client):
 @pytest.mark.pgsql('db_1', files=['initial_data_signed.sql'])
 async def test_post_already_in_db(service_client):
     data = {
-        'username': 'grebnev2003',
+        'email': 'vasya@mail.ru',
         'game': 'gta',
         'rating': 1,
         "text": 'net na telefone'
@@ -87,14 +87,13 @@ async def test_post_already_in_db(service_client):
         json=data,
         headers=header
     )
-    assert response.status == 200
-    assert response.text[0:10:1] == '1970-01-01'
+    assert response.status == 409
 
 
 @pytest.mark.pgsql('db_1', files=['initial_data_signed_with_reviews.sql'])
 async def test_update(service_client):
     patch = {
-        'username': 'vasya@mail.ru',
+        'email': 'vasya@mail.ru',
         'game': 'gta',
         'rating': 1,
         'text': 'net na telefone'
@@ -107,7 +106,7 @@ async def test_update(service_client):
         '/v1/reviews',
         params={
             'game': 'gta',
-            'username': 'vasya@mail.ru'
+            'email': 'vasya@mail.ru'
         }
     )
     assert len(response.json()) == 1

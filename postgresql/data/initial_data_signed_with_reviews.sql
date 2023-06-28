@@ -19,4 +19,4 @@ VALUES
 INSERT INTO
   ratings_schema.reviews
 VALUES
-  ('vasya@mail.ru', 'gtav', 10, 'nice game like it');
+  ('vasya@mail.ru', 'gta', 10, 'nice game like it');
