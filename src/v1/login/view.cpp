@@ -49,7 +49,7 @@ class Login : public userver::server::handlers::HttpHandlerBase {
     auto uuid = pg_cluster_
                     ->Execute(pg::ClusterHostType::kMaster,
                               "INSERT INTO ratings_schema.auth_sessions "
-                              "VALUES (DEFAULT, $1, DEFAULT) ON CONFLICT "
+                              "VALUES (DEFAULT, $1, DEFAULT) "
                               "RETURNING id;",
                               email)
                     .AsSingleRow<std::string>(pg::kFieldTag);

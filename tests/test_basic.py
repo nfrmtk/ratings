@@ -100,7 +100,8 @@ async def test_update(service_client):
     }
     response = await service_client.patch(
         '/v1/review',
-        json=patch
+        json=patch,
+        headers=header
     )
     assert response.status == 200
     response = await service_client.get(
