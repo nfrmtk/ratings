@@ -71,10 +71,6 @@ components_manager:
         dns-client:
             fs-task-processor: fs-task-processor
 
-        handler-post-review:
-            path: /v1/  review
-            method: POST
-            task_processor: main-task-processor
 
 
         handler-get-reviews:
@@ -85,4 +81,9 @@ components_manager:
         handler-update-review:
             path: /v1/review
             method: PATCH
+            task_processor: main-task-processor
+
+        handler-post-review:
+            path: /v1/review
+            method: POST
             task_processor: main-task-processor
