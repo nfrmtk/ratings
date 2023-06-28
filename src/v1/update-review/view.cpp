@@ -17,7 +17,7 @@ class UpdateReview : public userver::server::handlers::HttpHandlerBase {
   static constexpr std::string_view kName = "handler-update-review";
 
   UpdateReview(const userver::components::ComponentConfig& config,
-             const userver::components::ComponentContext& component_context)
+               const userver::components::ComponentContext& component_context)
       : HttpHandlerBase(config, component_context),
         pg_cluster_(
             component_context
@@ -32,12 +32,11 @@ class UpdateReview : public userver::server::handlers::HttpHandlerBase {
     auto text = body["text"].As<std::string>();
     auto game = body["game"].As<std::string>();
     auto username = body["username"].As<std::string>();
-    auto result = pg_cluster_
-                      ->Execute(pg::ClusterHostType::kMaster,
-                                "UPDATE ratings_schema.reviews "
-                                "SET review = $4, rating = $3 "
-                                "where username = $1 AND game = $2",
-                                username, game, rating, text);
+    auto result = pg_cluster_->Execute(pg::ClusterHostType::kMaster,
+                                       "UPDATE ratings_schema.reviews "
+                                       "SET review = $4, rating = $3 "
+                                       "where username = $1 AND game = $2",
+                                       username, game, rating, text);
     if (result.RowsAffected() == 0) {
       auto& response = request.GetHttpResponse();
       response.SetStatus(userver::server::http::HttpStatus::kBadRequest);

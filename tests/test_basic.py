@@ -78,6 +78,7 @@ async def test_post_already_in_db(service_client):
     assert response.status == 200
     assert response.text[0:10:1] == '1970-01-01'
 
+
 @pytest.mark.pgsql('db_1', files=['initial_data_reviews.sql'])
 async def test_update(service_client):
     body = {
@@ -100,4 +101,3 @@ async def test_update(service_client):
     assert len(response.json()) == 1
     response = response.json()[0]
     assert response == body
-

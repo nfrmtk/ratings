@@ -32,15 +32,16 @@ class PostReview : public userver::server::handlers::HttpHandlerBase {
     auto text = body["text"].As<std::string>();
     auto game = body["game"].As<std::string>();
     auto username = body["username"].As<std::string>();
-    auto result = pg_cluster_
-                      ->Execute(pg::ClusterHostType::kMaster,
-                                "INSERT INTO ratings_schema.reviews(username, "
-                                "game, rating, review) VALUES($1, $2, $3, $4) "
-                                "ON CONFLICT DO NOTHING "
-                                "RETURNING reviews.created_at",
-                                username, game, rating, text);
+    auto result =
+        pg_cluster_->Execute(pg::ClusterHostType::kMaster,
+                             "INSERT INTO ratings_schema.reviews(username, "
+                             "game, rating, review) VALUES($1, $2, $3, $4) "
+                             "ON CONFLICT DO NOTHING "
+                             "RETURNING reviews.created_at",
+                             username, game, rating, text);
     pg::TimePointTz timing;
-    if (!result.IsEmpty()) timing = result.AsSingleRow<pg::TimePointTz>(pg::kFieldTag);
+    if (!result.IsEmpty())
+      timing = result.AsSingleRow<pg::TimePointTz>(pg::kFieldTag);
     return userver::utils::datetime::LocalTimezoneTimestring(
         timing.GetUnderlying());
   }
