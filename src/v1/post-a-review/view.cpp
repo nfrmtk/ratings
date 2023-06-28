@@ -45,7 +45,6 @@ class PostReview : public userver::server::handlers::HttpHandlerBase {
                              "ON CONFLICT DO NOTHING "
                              "RETURNING reviews.created_at",
                              email, game, rating, text);
-    pg::Time
     if (result.IsEmpty()){
       request.GetHttpResponse().SetStatus(userver::server::http::HttpStatus::kConflict);
       return {};
