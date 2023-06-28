@@ -84,6 +84,21 @@ components_manager:
             task_processor: main-task-processor
 
         handler-post-review:
-            path: /v1/review
-            method: POST
-            task_processor: main-task-processor
+                    path: /v1/review
+                    method: POST
+                    task_processor: main-task-processor
+
+        handler-delete-review:
+                    path: /v1/review
+                    method: DELETE
+                    task_processor: main-task-processor
+
+        handler-login:
+                    path: /v1/login
+                    method: POST
+                    task_processor: main-task-processor
+
+        handler-register:
+                    path: /v1/register
+                    method: POST
+                    task_processor: main-task-processor

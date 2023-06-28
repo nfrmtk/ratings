@@ -6,9 +6,11 @@
 #include <userver/utils/daemon_run.hpp>
 
 #include "./v1/get-reviews/view.hpp"
+#include "./v1/login/view.hpp"
 #include "./v1/post-a-review/view.hpp"
+#include "./v1/register/view.hpp"
 #include "./v1/update-review/view.hpp"
-#include "hello.hpp"
+#include "./v1/delete-review/view.hpp"
 int main(int argc, char* argv[]) {
   auto component_list = userver::components::MinimalServerComponentList()
                             .Append<userver::server::handlers::Ping>()
@@ -16,9 +18,11 @@ int main(int argc, char* argv[]) {
                             .Append<userver::components::HttpClient>()
                             .Append<userver::server::handlers::TestsControl>();
 
-  ratings_service::AppendHello(component_list);
   ratings_service::AppendPostReview(component_list);
   ratings_service::AppendGetReviews(component_list);
   ratings_service::AppendUpdateReview(component_list);
+  ratings_service::AppendDeleteReview(component_list);
+  ratings_service::AppendRegister(component_list);
+  ratings_service::AppendLogin(component_list);
   return userver::utils::DaemonMain(argc, argv, component_list);
 }

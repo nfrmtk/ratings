@@ -8,7 +8,7 @@
 #include <userver/server/request/request_context.hpp>
 #include <userver/storages/postgres/cluster.hpp>
 #include <userver/storages/postgres/component.hpp>
-
+#include "../../lib/auth.hpp"
 namespace ratings_service {
 namespace {
 namespace pg = userver::storages::postgres;
@@ -27,6 +27,12 @@ class PostReview : public userver::server::handlers::HttpHandlerBase {
   std::string HandleRequestThrow(
       const userver::server::http::HttpRequest& request,
       userver::server::request::RequestContext&) const override {
+    auto info = GetSessionInfo(pg_cluster_, request);
+    if (!info.has_value()) {
+      request.GetHttpResponse().SetStatus(
+          userver::server::http::HttpStatus::kUnauthorized);
+      return {};
+    }
     auto body = userver::formats::json::FromString(request.RequestBody());
     auto rating = body["rating"].As<int32_t>();
     auto text = body["text"].As<std::string>();
