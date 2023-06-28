@@ -38,11 +38,11 @@ class Delete : public userver::server::handlers::HttpHandlerBase {
     auto body = userver::formats::json::FromString(request.RequestBody());
     auto& response = request.GetHttpResponse();
     auto game = body["game"].As<std::string>();
-    auto username = body["username"].As<std::string>();
+    auto email = body["email"].As<std::string>();
     auto result = pg_cluster_->Execute(pg::ClusterHostType::kMaster,
                                        "DELETE FROM ratings_schema.reviews "
-                                       "WHERE username = $1 AND game = $2",
-                                       username, game);
+                                       "WHERE email = $1 AND game = $2",
+                                       email, game);
     switch (result.RowsAffected()) {
       case 0: {
         response.SetStatus(userver::server::http::HttpStatus::kBadRequest);

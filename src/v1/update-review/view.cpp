@@ -38,12 +38,12 @@ class UpdateReview : public userver::server::handlers::HttpHandlerBase {
     auto rating = body["rating"].As<int32_t>();
     auto text = body["text"].As<std::string>();
     auto game = body["game"].As<std::string>();
-    auto username = body["username"].As<std::string>();
+    auto email = body["email"].As<std::string>();
     auto result = pg_cluster_->Execute(pg::ClusterHostType::kMaster,
                                        "UPDATE ratings_schema.reviews "
                                        "SET review = $4, rating = $3 "
-                                       "where username = $1 AND game = $2",
-                                       username, game, rating, text);
+                                       "where email = $1 AND game = $2",
+                                       email, game, rating, text);
     if (result.RowsAffected() == 0) {
       auto& response = request.GetHttpResponse();
       response.SetStatus(userver::server::http::HttpStatus::kBadRequest);

@@ -7,7 +7,7 @@
 
 namespace ratings_service {
 struct TReview {
-  std::string username;
+  std::string email;
   std::string game;
   std::int32_t rating;
   std::string text;
