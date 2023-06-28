@@ -23,12 +23,11 @@ std::optional<TSessionInfo> GetSessionInfo(
   if (res.IsEmpty()) {
     return std::nullopt;
   }
-
-  auto time = std::get<2>(res.AsSingleRow<TSessionInfo>(
-                              userver::storages::postgres::kFieldTag))
-                  .GetUnderlying();
+  auto session_info =
+      res.AsSingleRow<TSessionInfo>(userver::storages::postgres::kRowTag);
+  auto time = std::get<2>(session_info).GetUnderlying();
   if (std::chrono::system_clock::now() - time > 10min) {
-    if (rand() % 10 == 0) // haha
+    if (rand() % 10 == 0)  // haha
     {
       ptr->Execute(
           userver::storages::postgres::ClusterHostType::kMaster,
@@ -37,7 +36,6 @@ std::optional<TSessionInfo> GetSessionInfo(
     }
     return std::nullopt;
   }
-  return std::make_optional(
-      res.AsSingleRow<TSessionInfo>(userver::storages::postgres::kRowTag));
+  return std::make_optional(session_info);
 }
 }  // namespace ratings_service
