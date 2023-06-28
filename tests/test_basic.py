@@ -12,7 +12,7 @@ form = {
 }
 
 
-def register(service_client):
+async def register(service_client):
     return await service_client.post(
         '/v1/register',
         data=form
@@ -20,7 +20,7 @@ def register(service_client):
 
 
 async def test_register(service_client):
-    response = register(service_client)
+    response = await register(service_client)
     assert response.status == 200
 
 
