@@ -61,8 +61,7 @@ async def test_post_review(service_client):
 async def test_get_all_reviews(service_client):
     response = await service_client.get(
         '/v1/reviews',
-        params={
-        }
+        params={},
         headers=header
     )
     assert response.status == 200
