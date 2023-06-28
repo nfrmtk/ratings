@@ -8,7 +8,7 @@ userver::formats::json::Value Serialize(
     const TReview& data,
     userver::formats::serialize::To<userver::formats::json::Value>) {
   userver::formats::json::ValueBuilder builder;
-  builder["username"] = data.username;
+  builder["email"] = data.email;
   builder["game"] = data.game;
   builder["rating"] = data.rating;
   builder["text"] = data.text;
