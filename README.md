@@ -2,7 +2,12 @@
 
 Simple C++ service that uses [userver framework](https://github.com/userver-framework/userver) with PostgreSQL.
 
-See [openapi](openapi.yaml) for functionality description
+See [openapi](openapi.yaml) for functionality description.
+
+## TODO
+1. email/password validity/strogness check
+2. 'sign out' handler
+3. proper auth handling for more than 1 device per single user.
 
 
 ## Download and Build
