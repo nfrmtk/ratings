@@ -8,7 +8,7 @@
 #include <userver/server/request/request_context.hpp>
 #include <userver/storages/postgres/cluster.hpp>
 #include <userver/storages/postgres/component.hpp>
-
+#include "../../lib/auth.hpp"
 namespace ratings_service {
 namespace {
 namespace pg = userver::storages::postgres;
@@ -27,23 +27,31 @@ class PostReview : public userver::server::handlers::HttpHandlerBase {
   std::string HandleRequestThrow(
       const userver::server::http::HttpRequest& request,
       userver::server::request::RequestContext&) const override {
+    auto info = GetSessionInfo(pg_cluster_, request);
+    if (!info.has_value()) {
+      request.GetHttpResponse().SetStatus(
+          userver::server::http::HttpStatus::kUnauthorized);
+      return {};
+    }
     auto body = userver::formats::json::FromString(request.RequestBody());
     auto rating = body["rating"].As<int32_t>();
     auto text = body["text"].As<std::string>();
     auto game = body["game"].As<std::string>();
-    auto username = body["username"].As<std::string>();
+    auto email = body["email"].As<std::string>();
     auto result =
         pg_cluster_->Execute(pg::ClusterHostType::kMaster,
-                             "INSERT INTO ratings_schema.reviews(username, "
+                             "INSERT INTO ratings_schema.reviews(email, "
                              "game, rating, review) VALUES($1, $2, $3, $4) "
                              "ON CONFLICT DO NOTHING "
                              "RETURNING reviews.created_at",
-                             username, game, rating, text);
-    pg::TimePointTz timing;
-    if (!result.IsEmpty())
-      timing = result.AsSingleRow<pg::TimePointTz>(pg::kFieldTag);
+                             email, game, rating, text);
+    if (result.IsEmpty()) {
+      request.GetHttpResponse().SetStatus(
+          userver::server::http::HttpStatus::kConflict);
+      return {};
+    }
     return userver::utils::datetime::LocalTimezoneTimestring(
-        timing.GetUnderlying());
+        result.AsSingleRow<pg::TimePointTz>(pg::kFieldTag).GetUnderlying());
   }
 
  private:

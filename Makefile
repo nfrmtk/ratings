@@ -37,8 +37,6 @@ build-debug build-release: build-%: cmake-%
 # Test
 .PHONY: test-debug test-release
 test-debug test-release: test-%: build-%
-	@cmake --build build_$* -j $(NPROCS) --target ratings_service_unittest
-	@cmake --build build_$* -j $(NPROCS) --target ratings_service_benchmark
 	@cd build_$* && ((test -t 1 && GTEST_COLOR=1 PYTEST_ADDOPTS="--color=yes" ctest -V) || ctest -V)
 	@pep8 tests
 
@@ -82,7 +80,7 @@ format:
 # Build and run service in docker environment
 .PHONY: docker-start-service-debug docker-start-service-release
 docker-start-service-debug docker-start-service-release: docker-start-service-%:
-	@docker-compose run -p 8080:8080 -d --rm ratings_service-container make	 -- --in-docker-start-$*
+	@docker-compose run -p 8080:8080 --rm ratings_service-container make	 -- --in-docker-start-$*
 
 # Start targets makefile in docker environment
 .PHONY: docker-cmake-debug docker-build-debug docker-test-debug docker-clean-debug docker-install-debug docker-cmake-release docker-build-release docker-test-release docker-clean-release docker-install-release

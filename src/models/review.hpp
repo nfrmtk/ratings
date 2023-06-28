@@ -4,13 +4,15 @@
 #include <string>
 #include <userver/formats/json/value.hpp>
 #include <userver/formats/json/value_builder.hpp>
+#include <userver/storages/postgres/cluster.hpp>
 
 namespace ratings_service {
 struct TReview {
-  std::string username;
+  std::string email;
   std::string game;
   std::int32_t rating;
   std::string text;
+  userver::storages::postgres::TimePointTz created_at;
 };
 
 userver::formats::json::Value Serialize(

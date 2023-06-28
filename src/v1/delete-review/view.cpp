@@ -3,6 +3,7 @@
 //
 
 #include "view.hpp"
+#include <stdexcept>
 #include <userver/server/handlers/http_handler_base.hpp>
 #include <userver/server/http/http_request.hpp>
 #include <userver/server/request/request_context.hpp>
@@ -13,12 +14,12 @@
 namespace ratings_service {
 namespace {
 namespace pg = userver::storages::postgres;
-class UpdateReview : public userver::server::handlers::HttpHandlerBase {
+class Delete : public userver::server::handlers::HttpHandlerBase {
  public:
-  static constexpr std::string_view kName = "handler-update-review";
+  static constexpr std::string_view kName = "handler-delete-review";
 
-  UpdateReview(const userver::components::ComponentConfig& config,
-               const userver::components::ComponentContext& component_context)
+  Delete(const userver::components::ComponentConfig& config,
+         const userver::components::ComponentContext& component_context)
       : HttpHandlerBase(config, component_context),
         pg_cluster_(
             component_context
@@ -35,21 +36,27 @@ class UpdateReview : public userver::server::handlers::HttpHandlerBase {
       return {};
     }
     auto body = userver::formats::json::FromString(request.RequestBody());
-    auto rating = body["rating"].As<int32_t>();
-    auto text = body["text"].As<std::string>();
+    auto& response = request.GetHttpResponse();
     auto game = body["game"].As<std::string>();
     auto email = body["email"].As<std::string>();
     auto result = pg_cluster_->Execute(pg::ClusterHostType::kMaster,
-                                       "UPDATE ratings_schema.reviews "
-                                       "SET review = $4, rating = $3 "
-                                       "where email = $1 AND game = $2",
-                                       email, game, rating, text);
-    if (result.RowsAffected() == 0) {
-      auto& response = request.GetHttpResponse();
-      response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
-      return {};
+                                       "DELETE FROM ratings_schema.reviews "
+                                       "WHERE email = $1 AND game = $2",
+                                       email, game);
+    switch (result.RowsAffected()) {
+      case 0: {
+        response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
+        break;
+      }
+      case 1: {
+        break;
+      }
+      default: {
+        throw std::runtime_error(
+            "Number of deleted lines must not be greater than 1. "
+            "Possible cause: duplicaated rows in database.");
+      }
     }
-
     return {};
   }
 
@@ -57,7 +64,7 @@ class UpdateReview : public userver::server::handlers::HttpHandlerBase {
   pg::ClusterPtr pg_cluster_;
 };
 }  // namespace
-void AppendUpdateReview(userver::components::ComponentList& components) {
-  components.Append<UpdateReview>();
+void AppendDeleteReview(userver::components::ComponentList& components) {
+  components.Append<Delete>();
 }
 }  // namespace ratings_service

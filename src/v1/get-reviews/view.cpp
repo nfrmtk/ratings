@@ -26,38 +26,38 @@ class GetReviews : public userver::server::handlers::HttpHandlerBase {
   std::string HandleRequestThrow(
       const userver::server::http::HttpRequest& request,
       userver::server::request::RequestContext&) const override {
-    auto username = request.GetArg("username");
+    auto email = request.GetArg("email");
     auto game = request.GetArg("game");
     std::vector<TReview> ans;
-    if (username.empty() && game.empty()) {
+    if (email.empty() && game.empty()) {
       ans =
           pg_cluster_
               ->Execute(pg::ClusterHostType::kMaster,
                         "SELECT * FROM ratings_schema.reviews")
               .AsContainer<std::vector<ratings_service::TReview>>(pg::kRowTag);
     }
-    if (!username.empty() && !game.empty()) {
+    if (!email.empty() && !game.empty()) {
       ans = pg_cluster_
                 ->Execute(pg::ClusterHostType::kMaster,
                           "SELECT * FROM ratings_schema.reviews "
-                          "WHERE username = $1 AND game = $2",
-                          username, game)
+                          "WHERE email = $1 AND game = $2",
+                          email, game)
                 .AsContainer<std::vector<TReview>>(pg::kRowTag);
     }
-    if (username.empty() && !game.empty()) {
+    if (email.empty() && !game.empty()) {
       ans = pg_cluster_
                 ->Execute(pg::ClusterHostType::kMaster,
-                          "SELECT * FROM ratings_schema.reviews "
+                          "SELECT * FROM ratings_schema.reviews WHERE"
                           "game = $1",
                           game)
                 .AsContainer<std::vector<TReview>>(pg::kRowTag);
     }
-    if (!username.empty() && game.empty()) {
+    if (!email.empty() && game.empty()) {
       ans = pg_cluster_
                 ->Execute(pg::ClusterHostType::kMaster,
                           "SELECT * FROM ratings_schema.reviews "
-                          "WHERE username = $1",
-                          username)
+                          "WHERE email = $1",
+                          email)
                 .AsContainer<std::vector<TReview>>(pg::kRowTag);
     }
     userver::formats::json::ValueBuilder builder{ans};

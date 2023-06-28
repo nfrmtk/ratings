@@ -57,11 +57,6 @@ components_manager:
             throttling_enabled: false
             url_trailing_slash: strict-match
 
-        handler-hello:                    # Finally! Our handler.
-            path: /v1/hello               # Registering handler by URL '/v1/hello'.
-            method: POST                  # It will only reply to POST requests.
-            task_processor: main-task-processor  # Run it on CPU bound task processor
-
         postgres-db-1:
             dbconnection: $dbconnection
             blocking_task_processor: fs-task-processor
@@ -84,6 +79,21 @@ components_manager:
             task_processor: main-task-processor
 
         handler-post-review:
-            path: /v1/review
-            method: POST
-            task_processor: main-task-processor
+                    path: /v1/review
+                    method: POST
+                    task_processor: main-task-processor
+
+        handler-delete-review:
+                    path: /v1/review
+                    method: DELETE
+                    task_processor: main-task-processor
+
+        handler-login:
+                    path: /v1/login
+                    method: POST
+                    task_processor: main-task-processor
+
+        handler-register:
+                    path: /v1/register
+                    method: POST
+                    task_processor: main-task-processor
