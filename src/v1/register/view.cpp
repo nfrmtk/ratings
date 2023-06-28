@@ -27,7 +27,6 @@ class Register : public userver::server::handlers::HttpHandlerBase {
   std::string HandleRequestThrow(
       const userver::server::http::HttpRequest& request,
       userver::server::request::RequestContext&) const override {
-    auto body = userver::formats::json::FromString(request.RequestBody());
     auto email = request.GetFormDataArg("email")
                      .value;  // todo: check if email is correct
     auto passwd_hash = userver::crypto::hash::Sha256(

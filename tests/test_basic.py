@@ -8,14 +8,14 @@ from testsuite.databases import pgsql
 form = {
     'email': 'vasya@mail.ru',
     'password': 'vasya123',
-    'username': 'bigboy300'
+    'username': 'bigboy300',
 }
 
 
 async def register(service_client):
     return await service_client.post(
         '/v1/register',
-        data=form
+        form=form
     )
 
 
@@ -28,7 +28,7 @@ async def test_login(service_client):
     await register(service_client)
     response = await service_client.post(
         '/v1/login',
-        data={
+        json={
             'email': form['email'],
             'password': form['password']
         }
@@ -46,7 +46,7 @@ async def test_post_review(service_client):
     response = await service_client.post(
         '/v1/review',
         json={
-            'username': 'vasya',
+            'email': 'vasya@mail.ru',
             'game': 'gta5',
             'rating': 10,
             "text": 'vkusnyatina'
@@ -94,7 +94,7 @@ async def test_post_already_in_db(service_client):
 @pytest.mark.pgsql('db_1', files=['initial_data_signed_with_reviews.sql'])
 async def test_update(service_client):
     patch = {
-        'username': 'grebnev2003',
+        'username': 'vasya@mail.ru',
         'game': 'gta',
         'rating': 1,
         'text': 'net na telefone'
@@ -107,7 +107,7 @@ async def test_update(service_client):
         '/v1/reviews',
         params={
             'game': 'gta',
-            'username': 'grebnev2003'
+            'username': 'vasya@mail.ru'
         }
     )
     assert len(response.json()) == 1

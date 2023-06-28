@@ -47,7 +47,7 @@ class GetReviews : public userver::server::handlers::HttpHandlerBase {
     if (email.empty() && !game.empty()) {
       ans = pg_cluster_
                 ->Execute(pg::ClusterHostType::kMaster,
-                          "SELECT * FROM ratings_schema.reviews "
+                          "SELECT * FROM ratings_schema.reviews WHERE"
                           "game = $1",
                           game)
                 .AsContainer<std::vector<TReview>>(pg::kRowTag);
