@@ -98,10 +98,11 @@ async def test_update(service_client):
         'rating': 1,
         'text': 'net na telefone'
     }
-    await service_client.patch(
+    response = await service_client.patch(
         '/v1/review',
         json=patch
     )
+    assert response.status == 200
     response = await service_client.get(
         '/v1/reviews',
         params={

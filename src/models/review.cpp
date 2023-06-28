@@ -12,6 +12,7 @@ userver::formats::json::Value Serialize(
   builder["game"] = data.game;
   builder["rating"] = data.rating;
   builder["text"] = data.text;
+  builder["created_at"] = data.created_at;
   return builder.ExtractValue();
 }
 
