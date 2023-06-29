@@ -6,11 +6,19 @@ info:
 servers:
   - url: 'http://185.231.155.86:8080'
 components:
+  responses:
+    UnauthorizedError:
+      description: X-Ratings-User-Ticket key is missing or invalid
+  securitySchemes:
+    UserTicketAuth:
+      type: apiKey
+      in: header
+      name: X-Ratings-User-Ticket
   schemas:
     review:
       type: object
       properties:
-        username:
+        email:
           required: true
           type: string
         game:
@@ -22,16 +30,93 @@ components:
         text:
           required: false
           type: string
+        created_at:
+          required: true
+          type: string
+          format: date-time
 paths:
+  /v1/register:
+    post:
+      description: creates new user
+      responses:
+        200:
+          description: user created
+        400:
+          description: no email or password provided
+        409:
+          description: there was user with same email in the system
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  required: true
+                password:
+                  type: string
+                  format: password
+                  required: true
+                username:
+                  type: string
+                  required: false
+  /v1/login:
+    post:
+      description: creates new auth session
+      responses:
+        400:
+          description: email or password missing
+        401:
+          description: wrong password
+        200:
+          description: uuid created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ticket:
+                    type: string
+                    format: uuid
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  required: true
+                password:
+                  type: string
+                  format: password
+                  required: true
   /v1/review:
     post:
+      security:
+        - UserTicketAuth: [ ]
       description: creates new review
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/review'
+              type: object
+              properties:
+                game:
+                  type: string
+                  required: true
+                text:
+                  type: string
+                  required: false
+                rating:
+                  type: integer
+                  required: true
       responses:
         200:
           description: OK, returns time of database row creation
@@ -40,6 +125,8 @@ paths:
               schema:
                 description: timing of creation
                 type: string
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
   /v1/reviews:
     get:
       description: returns all reviews matching request
@@ -62,15 +149,45 @@ paths:
                 items:
                   $ref: '#/components/schemas/review'
     patch:
+      security:
+        - UserTicketAuth: [ ]
       description: updates specified review. guarantee - new review will not be created
       responses:
         200:
           description: system successfully updated review with given username and game
         400:
-          description: there were no review with such username and game
+          description: there were no review with such username and game or no game name provided
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/review'
+              type: object
+              properties:
+                game:
+                  type: string
+                  required: true
+                text:
+                  type: string
+                  required: false
+                rating:
+                  type: integer
+                  required: false
+
+    delete:
+      security:
+        - UserTicketAuth: [ ]
+      responses:
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        200:
+          description: there was such review in the system, and it was successfully deleted
+        400:
+          description: there wasn't such review in the system, incorrect request
+      description: deletes specified review. post-guarantee - no review with specified email and game-name
+      parameters:
+        - in: query
+          name: game
+          required: true

@@ -27,17 +27,24 @@ class PostReview : public userver::server::handlers::HttpHandlerBase {
   std::string HandleRequestThrow(
       const userver::server::http::HttpRequest& request,
       userver::server::request::RequestContext&) const override {
+
     auto info = GetSessionInfo(pg_cluster_, request);
     if (!info.has_value()) {
       request.GetHttpResponse().SetStatus(
           userver::server::http::HttpStatus::kUnauthorized);
       return {};
     }
+
     auto body = userver::formats::json::FromString(request.RequestBody());
-    auto rating = body["rating"].As<int32_t>();
-    auto text = body["text"].As<std::string>();
+    if (!body.HasMember("game") || !body.HasMember("rating")){
+      request.GetHttpResponse().SetStatus(
+          userver::server::http::HttpStatus::kBadRequest);
+      return {};
+    }
+    auto rating = body["rating"].As<std::int32_t>();
+    auto text = body.HasMember("text") ? body["text"].As<std::string>() : "";
     auto game = body["game"].As<std::string>();
-    auto email = body["email"].As<std::string>();
+    auto email = std::get<1>(*info);
     auto result =
         pg_cluster_->Execute(pg::ClusterHostType::kMaster,
                              "INSERT INTO ratings_schema.reviews(email, "

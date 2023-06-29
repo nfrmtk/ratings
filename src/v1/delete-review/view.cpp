@@ -29,16 +29,15 @@ class Delete : public userver::server::handlers::HttpHandlerBase {
   std::string HandleRequestThrow(
       const userver::server::http::HttpRequest& request,
       userver::server::request::RequestContext&) const override {
+    auto& response = request.GetHttpResponse();
     auto info = GetSessionInfo(pg_cluster_, request);
     if (!info.has_value()) {
-      request.GetHttpResponse().SetStatus(
+      response.SetStatus(
           userver::server::http::HttpStatus::kUnauthorized);
       return {};
     }
-    auto body = userver::formats::json::FromString(request.RequestBody());
-    auto& response = request.GetHttpResponse();
-    auto game = body["game"].As<std::string>();
-    auto email = body["email"].As<std::string>();
+    auto game = request.GetArg("game");
+    auto email = std::get<1>(*info);
     auto result = pg_cluster_->Execute(pg::ClusterHostType::kMaster,
                                        "DELETE FROM ratings_schema.reviews "
                                        "WHERE email = $1 AND game = $2",

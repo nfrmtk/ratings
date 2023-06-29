@@ -25,7 +25,7 @@ std::optional<TSessionInfo> GetSessionInfo(
   }
   auto session_info =
       res.AsSingleRow<TSessionInfo>(userver::storages::postgres::kRowTag);
-  auto time = std::get<2>(session_info).GetUnderlying();
+  auto& time = std::get<2>(session_info).GetUnderlying();
   if (std::chrono::system_clock::now() - time > 10min) {
     if (rand() % 10 == 0)  // haha
     {

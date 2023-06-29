@@ -27,6 +27,12 @@ class Login : public userver::server::handlers::HttpHandlerBase {
   std::string HandleRequestThrow(
       const userver::server::http::HttpRequest& request,
       userver::server::request::RequestContext&) const override {
+    auto& response = request.GetHttpResponse();
+    if (!request.HasFormDataArg("email") || !request.HasFormDataArg("password")){
+      response.SetStatus(
+          userver::server::http::HttpStatus::kBadRequest);
+      return {};
+    }
     auto email = request.GetFormDataArg("email").value;
     auto passwd_hash =
         userver::crypto::hash::Sha256(request.GetFormDataArg("password").value);
@@ -35,7 +41,6 @@ class Login : public userver::server::handlers::HttpHandlerBase {
                                        "FROM ratings_schema.users "
                                        "WHERE email = $1",
                                        email, passwd_hash);
-    auto& response = request.GetHttpResponse();
     if (result.IsEmpty()) {
       response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
       return {};
