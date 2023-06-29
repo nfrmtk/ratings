@@ -8,7 +8,7 @@ See [openapi](openapi.yaml) for functionality description.
 1. email/password validity/strogness check
 2. 'sign out' handler
 3. proper auth handling for more than 1 device per single user.
-
+4. openapi
 
 ## Download and Build
 
