@@ -28,7 +28,7 @@ async def test_login(service_client):
     await register(service_client)
     response = await service_client.post(
         '/v1/login',
-        json={
+        data={
             'email': form['email'],
             'password': form['password']
         }
