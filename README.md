@@ -5,8 +5,6 @@ Simple C++ service that uses [userver framework](https://github.com/userver-fram
 ## Features
 Basic features are described [here](./openai.yaml)
 
-- Login: 
-
 ## TODO
 1. email/password validity/strogness check
 2. 'sign out' handler
