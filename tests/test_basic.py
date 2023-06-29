@@ -1,5 +1,8 @@
 import pytest
 
+import aiohttp
+
+
 from testsuite.databases import pgsql
 
 # Start the tests via `make test-debug` or `make test-release`
@@ -10,12 +13,35 @@ form = {
     'password': 'vasya123',
     'username': 'bigboy300',
 }
+def data_email_and_password(email, password):
+    with aiohttp.MultipartWriter('form-data') as data:
+        payload = aiohttp.payload.StringPayload(email)
+        payload.set_content_disposition('form-data', name="email")
+        data.append_payload(payload)
+        payload = aiohttp.payload.StringPayload(password)
+        payload.set_content_disposition('form-data', name="password")
+        data.append_payload(payload)
+    return data
+
+def data_email_password_username(form):
+    with aiohttp.MultipartWriter('form-data') as data:
+        payload = aiohttp.payload.StringPayload(form['email'])
+        payload.set_content_disposition('form-data', name="email")
+        data.append_payload(payload)
+        payload = aiohttp.payload.StringPayload(form['password'])
+        payload.set_content_disposition('form-data', name="password")
+        data.append_payload(payload)
+        payload = aiohttp.payload.StringPayload(form['username'])
+        payload.set_content_disposition('form-data', name="username")
+        data.append_payload(payload)
+    return data
+
 
 
 async def register(service_client):
     return await service_client.post(
         '/v1/register',
-        data=form
+        data=data_email_password_username(form)
     )
 
 
@@ -28,10 +54,7 @@ async def test_login(service_client):
     await register(service_client)
     response = await service_client.post(
         '/v1/login',
-        data={
-            'email': form['email'],
-            'password': form['password']
-        }
+        data=data_email_and_password(form['email'], form['password'])
     )
     assert response.status == 200
     assert 'ticket' in response.json()
