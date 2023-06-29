@@ -138,3 +138,12 @@ async def test_update(service_client):
     )
     assert len(response.json()) == 1
     assert response.json()[0]['text'] == patch['text']
+
+
+async def test_hack(service_client):
+    response = await service_client.post(
+        '/v1/log-out'
+    )
+    assert response.json() == {
+        'a': 'b'
+    }

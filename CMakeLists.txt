@@ -24,7 +24,9 @@ add_library(${PROJECT_NAME}_objs OBJECT
 		src/v1/register/view.cpp
 		src/v1/register/view.hpp
 		src/v1/login/view.cpp
-		src/v1/login/view.hpp)
+		src/v1/login/view.hpp
+		src/v1/log-out/view.cpp
+		src/v1/log-out/view.hpp)
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver-core userver-postgresql)
 
 

@@ -97,3 +97,9 @@ components_manager:
                     path: /v1/register
                     method: POST
                     task_processor: main-task-processor
+
+
+        handler-log-out:
+                    path: /v1/log-out
+                    method: POST
+                    task_processor: main-task-processor
