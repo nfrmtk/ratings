@@ -27,7 +27,6 @@ class PostReview : public userver::server::handlers::HttpHandlerBase {
   std::string HandleRequestThrow(
       const userver::server::http::HttpRequest& request,
       userver::server::request::RequestContext&) const override {
-
     auto info = GetSessionInfo(pg_cluster_, request);
     if (!info.has_value()) {
       request.GetHttpResponse().SetStatus(
@@ -36,7 +35,7 @@ class PostReview : public userver::server::handlers::HttpHandlerBase {
     }
 
     auto body = userver::formats::json::FromString(request.RequestBody());
-    if (!body.HasMember("game") || !body.HasMember("rating")){
+    if (!body.HasMember("game") || !body.HasMember("rating")) {
       request.GetHttpResponse().SetStatus(
           userver::server::http::HttpStatus::kBadRequest);
       return {};

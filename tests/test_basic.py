@@ -13,6 +13,8 @@ form = {
     'password': 'vasya123',
     'username': 'bigboy300',
 }
+
+
 def data_email_and_password(email, password):
     with aiohttp.MultipartWriter('form-data') as data:
         payload = aiohttp.payload.StringPayload(email)
@@ -22,6 +24,7 @@ def data_email_and_password(email, password):
         payload.set_content_disposition('form-data', name="password")
         data.append_payload(payload)
     return data
+
 
 def data_email_password_username(form):
     with aiohttp.MultipartWriter('form-data') as data:
@@ -35,7 +38,6 @@ def data_email_password_username(form):
         payload.set_content_disposition('form-data', name="username")
         data.append_payload(payload)
     return data
-
 
 
 async def register(service_client):

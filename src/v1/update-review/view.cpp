@@ -31,14 +31,12 @@ class UpdateReview : public userver::server::handlers::HttpHandlerBase {
     auto& response = request.GetHttpResponse();
     auto info = GetSessionInfo(pg_cluster_, request);
     if (!info.has_value()) {
-      response.SetStatus(
-          userver::server::http::HttpStatus::kUnauthorized);
+      response.SetStatus(userver::server::http::HttpStatus::kUnauthorized);
       return {};
     }
     auto body = userver::formats::json::FromString(request.RequestBody());
-    if (!body.HasMember("game")){
-      response.SetStatus(
-          userver::server::http::HttpStatus::kBadRequest);
+    if (!body.HasMember("game")) {
+      response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
       return {};
     }
     auto game = body["game"].As<std::string>();
@@ -46,30 +44,36 @@ class UpdateReview : public userver::server::handlers::HttpHandlerBase {
     bool hasNewRating = body.HasMember("rating");
     bool hasNewText = body.HasMember("text");
     std::size_t rowsAffected = 0;
-    if (hasNewRating && hasNewText){
+    if (hasNewRating && hasNewText) {
       auto rating = body["rating"].As<int32_t>();
       auto text = body["text"].As<std::string>();
-      rowsAffected = pg_cluster_->Execute(pg::ClusterHostType::kMaster,
-                                          "UPDATE ratings_schema.reviews "
-                                          "SET review = $4, rating = $3 "
-                                          "where email = $1 AND game = $2",
-                                          email, game, rating, text).RowsAffected();
+      rowsAffected = pg_cluster_
+                         ->Execute(pg::ClusterHostType::kMaster,
+                                   "UPDATE ratings_schema.reviews "
+                                   "SET review = $4, rating = $3 "
+                                   "where email = $1 AND game = $2",
+                                   email, game, rating, text)
+                         .RowsAffected();
     }
-    if (!hasNewText && hasNewRating){
+    if (!hasNewText && hasNewRating) {
       auto rating = body["rating"].As<int32_t>();
-      rowsAffected = pg_cluster_->Execute(pg::ClusterHostType::kMaster,
-                                          "UPDATE ratings_schema.reviews "
-                                          "SET rating = $3 "
-                                          "WHERE email = $1 AND game = $2",
-                                          email, game, rating).RowsAffected();
+      rowsAffected = pg_cluster_
+                         ->Execute(pg::ClusterHostType::kMaster,
+                                   "UPDATE ratings_schema.reviews "
+                                   "SET rating = $3 "
+                                   "WHERE email = $1 AND game = $2",
+                                   email, game, rating)
+                         .RowsAffected();
     }
-    if (!hasNewRating && hasNewText){
+    if (!hasNewRating && hasNewText) {
       auto text = body["text"].As<std::string>();
-      rowsAffected = pg_cluster_->Execute(pg::ClusterHostType::kMaster,
-                                          "UPDATE ratings_schema.reviews "
-                                          "SET review = $3 "
-                                          "where email = $1 AND game = $2",
-                                          email, game, text).RowsAffected();
+      rowsAffected = pg_cluster_
+                         ->Execute(pg::ClusterHostType::kMaster,
+                                   "UPDATE ratings_schema.reviews "
+                                   "SET review = $3 "
+                                   "where email = $1 AND game = $2",
+                                   email, game, text)
+                         .RowsAffected();
     }
     if (rowsAffected == 0) {
       response.SetStatus(userver::server::http::HttpStatus::kBadRequest);

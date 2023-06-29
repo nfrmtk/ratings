@@ -32,8 +32,7 @@ class Delete : public userver::server::handlers::HttpHandlerBase {
     auto& response = request.GetHttpResponse();
     auto info = GetSessionInfo(pg_cluster_, request);
     if (!info.has_value()) {
-      response.SetStatus(
-          userver::server::http::HttpStatus::kUnauthorized);
+      response.SetStatus(userver::server::http::HttpStatus::kUnauthorized);
       return {};
     }
     auto game = request.GetArg("game");

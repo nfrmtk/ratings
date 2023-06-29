@@ -27,7 +27,8 @@ class Register : public userver::server::handlers::HttpHandlerBase {
   std::string HandleRequestThrow(
       const userver::server::http::HttpRequest& request,
       userver::server::request::RequestContext&) const override {
-    if (!request.HasFormDataArg("email") || !request.HasFormDataArg("password")){
+    if (!request.HasFormDataArg("email") ||
+        !request.HasFormDataArg("password")) {
       request.GetHttpResponse().SetStatus(
           userver::server::http::HttpStatus::kBadRequest);
       return {};

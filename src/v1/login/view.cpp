@@ -28,9 +28,9 @@ class Login : public userver::server::handlers::HttpHandlerBase {
       const userver::server::http::HttpRequest& request,
       userver::server::request::RequestContext&) const override {
     auto& response = request.GetHttpResponse();
-    if (!request.HasFormDataArg("email") || !request.HasFormDataArg("password")){
-      response.SetStatus(
-          userver::server::http::HttpStatus::kBadRequest);
+    if (!request.HasFormDataArg("email") ||
+        !request.HasFormDataArg("password")) {
+      response.SetStatus(userver::server::http::HttpStatus::kBadRequest);
       return {};
     }
     auto email = request.GetFormDataArg("email").value;
