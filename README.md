@@ -1,6 +1,6 @@
 # ratings_service
 
-Simple C++ service that uses [userver framework](https://github.com/userver-framework/userver) with PostgreSQL.
+C++ CRUD service that uses [userver framework](https://github.com/userver-framework/userver) with PostgreSQL.
 
 ## Features
 Basic features are described [here](./openai.yaml)
