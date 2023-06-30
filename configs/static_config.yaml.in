@@ -84,7 +84,7 @@ components_manager:
                     task_processor: main-task-processor
 
         handler-delete-review:
-                    path: /v1/review
+                    path: /v1/review/{game}
                     method: DELETE
                     task_processor: main-task-processor
 
@@ -95,5 +95,11 @@ components_manager:
 
         handler-register:
                     path: /v1/register
+                    method: POST
+                    task_processor: main-task-processor
+
+
+        handler-log-out:
+                    path: /v1/log-out
                     method: POST
                     task_processor: main-task-processor
