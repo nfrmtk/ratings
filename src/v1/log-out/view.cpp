@@ -9,6 +9,7 @@
 #include <userver/server/request/request_context.hpp>
 #include <userver/storages/postgres/cluster.hpp>
 #include <userver/storages/postgres/component.hpp>
+#include <userver/utils/assert.hpp>
 #include "../../lib/auth.hpp"
 
 namespace ratings_service {
@@ -29,18 +30,17 @@ class LogOut : public userver::server::handlers::HttpHandlerBase {
   std::string HandleRequestThrow(
       const userver::server::http::HttpRequest& request,
       userver::server::request::RequestContext&) const override {
-    //    auto info = GetSessionInfo(pg_cluster_, request);
-    //    if (!info.has_value()) {
-    //      request.GetHttpResponse().SetStatus(
-    //          userver::server::http::HttpStatus::kUnauthorized);
-    //      return {};
-    //    }
-    userver::formats::json::ValueBuilder builder;
-    auto keys = request.GetHeaderNames();
-    for (const auto& header_key : keys) {
-      builder[header_key] = request.GetHeader(header_key);
+    auto info = GetSessionInfo(pg_cluster_, request);
+    if (!info.has_value()) {
+      request.GetHttpResponse().SetStatus(
+          userver::server::http::HttpStatus::kUnauthorized);
+      return {};
     }
-    return userver::formats::json::ToString(builder.ExtractValue());
+    auto result = pg_cluster_->Execute(pg::ClusterHostType::kMaster,
+                         "DELETE FROM ratings_schema.auth_sessions WHERE email = $1;",
+                         std::get<1>(*info));
+    UASSERT_MSG(result.RowsAffected() != 0, "At least 1 session must be deleted!");
+    return {};
   }
 
  private:

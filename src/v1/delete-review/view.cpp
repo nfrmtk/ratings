@@ -35,7 +35,7 @@ class Delete : public userver::server::handlers::HttpHandlerBase {
       response.SetStatus(userver::server::http::HttpStatus::kUnauthorized);
       return {};
     }
-    auto game = request.GetArg("game");
+    auto game = request.GetPathArg("game");
     auto email = std::get<1>(*info);
     auto result = pg_cluster_->Execute(pg::ClusterHostType::kMaster,
                                        "DELETE FROM ratings_schema.reviews "

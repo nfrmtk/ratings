@@ -71,7 +71,6 @@ async def test_post_review(service_client):
     response = await service_client.post(
         '/v1/review',
         json={
-            'email': 'vasya@mail.ru',
             'game': 'gta5',
             'rating': 10,
             "text": 'vkusnyatina'
@@ -87,16 +86,26 @@ async def test_get_all_reviews(service_client):
     response = await service_client.get(
         '/v1/reviews',
         params={},
-        headers=header
     )
     assert response.status == 200
     assert len(response.json()) > 0
+
+@pytest.mark.pgsql('db_1', files=['initial_data_signed_with_reviews.sql'])
+async def test_get_single_review(service_client):
+    response = await service_client.get(
+        '/v1/reviews',
+        params={
+            'game': 'gta',
+            'email': 'vasya@mail.ru'
+        },
+    )
+    assert response.status == 200
+    assert response.json()['text'] == 'nice game like it'
 
 
 @pytest.mark.pgsql('db_1', files=['initial_data_signed.sql'])
 async def test_post_already_in_db(service_client):
     data = {
-        'email': 'vasya@mail.ru',
         'game': 'gta',
         'rating': 1,
         "text": 'net na telefone'
@@ -114,11 +123,33 @@ async def test_post_already_in_db(service_client):
     )
     assert response.status == 409
 
+@pytest.mark.pgsql('db_1', files=['initial_data_signed_with_reviews.sql'])
+async def test_delete(service_client):
+    response = await service_client.get(
+        '/v1/reviews',
+        params={
+            'game': 'gta',
+            'email': 'vasya@mail.ru'
+        }
+    )
+    assert len(response.json()) == 1
+    response = await service_client.delete(
+        '/v1/review/gta',
+        headers=header
+    )
+    assert response.status == 200
+    response = await service_client.get(
+        '/v1/reviews',
+        params={
+            'game': 'gta',
+            'email': 'vasya@mail.ru'
+        }
+    )
+    assert len(response.json()) == 0
 
 @pytest.mark.pgsql('db_1', files=['initial_data_signed_with_reviews.sql'])
 async def test_update(service_client):
     patch = {
-        'email': 'vasya@mail.ru',
         'game': 'gta',
         'rating': 1,
         'text': 'net na telefone'
@@ -139,11 +170,20 @@ async def test_update(service_client):
     assert len(response.json()) == 1
     assert response.json()[0]['text'] == patch['text']
 
-
-async def test_hack(service_client):
+@pytest.mark.pgsql('db_1', files=['initial_data_signed.sql'])
+async def test_log_out(service_client):
     response = await service_client.post(
         '/v1/log-out'
     )
-    assert response.json() == {
-        'a': 'b'
-    }
+    assert response.status == 200
+
+    response = await service_client.post(
+        '/v1/review',
+        json={
+            'game': 'gta',
+            'rating': 1,
+            "text": 'net na telefone'
+        },
+        headers=header
+    )
+    assert response.status == 401
