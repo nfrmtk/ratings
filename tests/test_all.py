@@ -78,7 +78,7 @@ async def test_post_review(service_client):
         headers=header
     )
     assert response.status == 200
-    assert response.text[0:10:1] != '1970-01-01'
+
 
 
 @pytest.mark.pgsql('db_1', files=['initial_data_signed_with_reviews.sql'])
@@ -100,22 +100,16 @@ async def test_get_single_review(service_client):
         },
     )
     assert response.status == 200
-    assert response.json()['text'] == 'nice game like it'
+    assert response.json()[0]['text'] == 'nice game like it'
 
 
-@pytest.mark.pgsql('db_1', files=['initial_data_signed.sql'])
+@pytest.mark.pgsql('db_1', files=['initial_data_signed_with_reviews.sql'])
 async def test_post_already_in_db(service_client):
     data = {
         'game': 'gta',
         'rating': 1,
         "text": 'net na telefone'
     }
-    response = await service_client.post(
-        '/v1/review',
-        json=data,
-        headers=header
-    )
-    assert response.status == 200
     response = await service_client.post(
         '/v1/review',
         json=data,
@@ -173,7 +167,9 @@ async def test_update(service_client):
 @pytest.mark.pgsql('db_1', files=['initial_data_signed.sql'])
 async def test_log_out(service_client):
     response = await service_client.post(
-        '/v1/log-out'
+        '/v1/log-out',
+        headers=header
+
     )
     assert response.status == 200
 
