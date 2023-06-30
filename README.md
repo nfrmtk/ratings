@@ -7,7 +7,7 @@ Basic features are described [here](./openai.yaml)
 
 ## TODO
 1. email/password validity/strogness check
-2. 'sign out' handler
+2. ~'sign out' handler~ DONE
 3. proper auth handling for more than 1 device per single user.
 4. openapi
 
