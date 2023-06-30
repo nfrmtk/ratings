@@ -26,11 +26,6 @@ class GetReviews : public userver::server::handlers::HttpHandlerBase {
   std::string HandleRequestThrow(
       const userver::server::http::HttpRequest& request,
       userver::server::request::RequestContext&) const override {
-    if (!request.HasArg("game") || !request.HasArg("email")) {
-      request.GetHttpResponse().SetStatus(
-          userver::server::http::HttpStatus::kBadRequest);
-      return {};
-    }
     auto email = request.GetArg("email");
     auto game = request.GetArg("game");
     std::vector<TReview> ans;
