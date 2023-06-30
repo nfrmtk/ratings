@@ -36,10 +36,12 @@ class LogOut : public userver::server::handlers::HttpHandlerBase {
           userver::server::http::HttpStatus::kUnauthorized);
       return {};
     }
-    auto result = pg_cluster_->Execute(pg::ClusterHostType::kMaster,
-                         "DELETE FROM ratings_schema.auth_sessions WHERE email = $1;",
-                         std::get<1>(*info));
-    UASSERT_MSG(result.RowsAffected() != 0, "At least 1 session must be deleted!");
+    auto result = pg_cluster_->Execute(
+        pg::ClusterHostType::kMaster,
+        "DELETE FROM ratings_schema.auth_sessions WHERE email = $1;",
+        std::get<1>(*info));
+    UASSERT_MSG(result.RowsAffected() != 0,
+                "At least 1 session must be deleted!");
     return {};
   }
 

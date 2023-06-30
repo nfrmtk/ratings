@@ -80,7 +80,6 @@ async def test_post_review(service_client):
     assert response.status == 200
 
 
-
 @pytest.mark.pgsql('db_1', files=['initial_data_signed_with_reviews.sql'])
 async def test_get_all_reviews(service_client):
     response = await service_client.get(
@@ -89,6 +88,7 @@ async def test_get_all_reviews(service_client):
     )
     assert response.status == 200
     assert len(response.json()) > 0
+
 
 @pytest.mark.pgsql('db_1', files=['initial_data_signed_with_reviews.sql'])
 async def test_get_single_review(service_client):
@@ -117,6 +117,7 @@ async def test_post_already_in_db(service_client):
     )
     assert response.status == 409
 
+
 @pytest.mark.pgsql('db_1', files=['initial_data_signed_with_reviews.sql'])
 async def test_delete(service_client):
     response = await service_client.get(
@@ -141,6 +142,7 @@ async def test_delete(service_client):
     )
     assert len(response.json()) == 0
 
+
 @pytest.mark.pgsql('db_1', files=['initial_data_signed_with_reviews.sql'])
 async def test_update(service_client):
     patch = {
@@ -163,6 +165,7 @@ async def test_update(service_client):
     )
     assert len(response.json()) == 1
     assert response.json()[0]['text'] == patch['text']
+
 
 @pytest.mark.pgsql('db_1', files=['initial_data_signed.sql'])
 async def test_log_out(service_client):
