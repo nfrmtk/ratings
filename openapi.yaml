@@ -4,7 +4,7 @@ info:
   description: ratings API
   version: 1.0.0
 servers:
-  - url: 'http://185.231.155.86:8080'
+  - url: 'http://45.141.101.200:8080'
 components:
   responses:
     UnauthorizedError:
