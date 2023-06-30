@@ -5,7 +5,7 @@ DROP SCHEMA IF EXISTS ratings_schema CASCADE;
 CREATE SCHEMA IF NOT EXISTS ratings_schema;
 
 CREATE TABLE IF NOT EXISTS ratings_schema.users(
-    email TEXT PRIMARY KEY,
+    email TEXT UNIQUE PRIMARY KEY,
     username TEXT,
     password_hash TEXT
 );
