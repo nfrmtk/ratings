@@ -96,6 +96,17 @@ paths:
                   type: string
                   format: password
                   required: true
+  /v1/logout:
+    post:
+      description: closes all active sessions
+      security:
+        - UserTicketAuth: [ ]
+      responses:
+        401:
+          description: unauthorised
+        200:
+          description: OK
+
   /v1/review:
     post:
       security:
@@ -127,27 +138,6 @@ paths:
                 type: string
         401:
           $ref: '#/components/responses/UnauthorizedError'
-  /v1/reviews:
-    get:
-      description: returns all reviews matching request
-      parameters:
-        - name: username
-          in: query
-          description: username to search for
-          required: false
-        - name: game
-          in: query
-          description: game to search for
-          required: false
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/review'
     patch:
       security:
         - UserTicketAuth: [ ]
@@ -175,7 +165,7 @@ paths:
                 rating:
                   type: integer
                   required: false
-
+  /v1/review/{game}:
     delete:
       security:
         - UserTicketAuth: [ ]
@@ -188,6 +178,27 @@ paths:
           description: there wasn't such review in the system, incorrect request
       description: deletes specified review. post-guarantee - no review with specified email and game-name
       parameters:
-        - in: query
+        - in: path
           name: game
           required: true
+  /v1/reviews:
+    get:
+      description: returns all reviews matching request
+      parameters:
+        - name: username
+          in: query
+          description: username to search for
+          required: false
+        - name: game
+          in: query
+          description: game to search for
+          required: false
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/review'
