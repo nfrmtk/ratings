@@ -12,7 +12,7 @@ INSTANTIATE_TEST_SUITE_P(results_true, CorrectEmailTest,
                                            "123@123456.com"s,
                                            "almaz03@yandex.ru"s));
 
-UTEST_P(CorrectEmailTest, pass){
+UTEST_P(CorrectEmailTest, pass_true){
   ASSERT_TRUE(ratings_service::isEmailCorrect(GetParam()));
 }
 
@@ -28,6 +28,6 @@ INSTANTIATE_TEST_SUITE_P(results_false, IncorrectEmailTest,
                                            "pass@ya"s,
                                            "pass@ya#.ru"s));
 
-UTEST_P(IncorrectEmailTest, pass){
+UTEST_P(IncorrectEmailTest, pass_false){
   ASSERT_FALSE(ratings_service::isEmailCorrect(GetParam()));
 }
