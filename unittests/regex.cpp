@@ -31,3 +31,9 @@ INSTANTIATE_TEST_SUITE_P(results_false, IncorrectEmailTest,
 UTEST_P(IncorrectEmailTest, pass_false){
   ASSERT_FALSE(ratings_service::isEmailCorrect(GetParam()));
 }
+
+
+int main(int argc, char* argv[]){
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}
