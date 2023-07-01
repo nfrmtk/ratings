@@ -4,18 +4,21 @@
 using namespace std::literals;
 
 
-struct EmailTest : ::testing::TestWithParam<std::string> {};
+struct CorrectEmailTest : ::testing::TestWithParam<std::string> {};
 
-INSTANTIATE_TEST_SUITE_P(results_true, EmailTest,
+INSTANTIATE_TEST_SUITE_P(results_true, CorrectEmailTest,
                          ::testing::Values("vasya@pupkin.ru"s,
                                            "vasya.pupkin@mail.ru"s,
                                            "123@123456.com"s,
                                            "almaz03@yandex.ru"s));
 
-UTEST_P(EmailTest, correct_emails){
+UTEST_P(CorrectEmailTest, pass){
   ASSERT_TRUE(ratings_service::isEmailCorrect(GetParam()));
 }
-INSTANTIATE_TEST_SUITE_P(results_false, EmailTest,
+
+struct IncorrectEmailTest : ::testing::TestWithParam<std::string> {};
+
+INSTANTIATE_TEST_SUITE_P(results_false, IncorrectEmailTest,
                          ::testing::Values("va...sya@pupkin.ru"s,
                                            "12@3@yahoo.ru"s,
                                            "#123@123456.com"s,
@@ -25,6 +28,6 @@ INSTANTIATE_TEST_SUITE_P(results_false, EmailTest,
                                            "pass@ya"s,
                                            "pass@ya#.ru"s));
 
-UTEST_P(EmailTest, incorrect_emails){
+UTEST_P(IncorrectEmailTest, pass){
   ASSERT_FALSE(ratings_service::isEmailCorrect(GetParam()));
 }
