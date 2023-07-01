@@ -26,7 +26,9 @@ add_library(${PROJECT_NAME}_objs OBJECT
 		src/v1/login/view.cpp
 		src/v1/login/view.hpp
 		src/v1/log-out/view.cpp
-		src/v1/log-out/view.hpp)
+		src/v1/log-out/view.hpp
+		src/lib/validation.cpp
+		src/lib/validation.hpp)
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver-core userver-postgresql)
 
 
@@ -34,6 +36,11 @@ target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver-core userver-postgresq
 add_executable(${PROJECT_NAME} src/main.cpp)
 target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_objs)
 
+add_executable(${PROJECT_NAME}_unittest
+		unittests/regex.cpp
+		)
+target_link_libraries(${PROJECT_NAME}_unittest PRIVATE ${PROJECT_NAME}_objs userver-utest)
+add_google_tests(${PROJECT_NAME}_unittest)
 
 
 # Functional Tests
