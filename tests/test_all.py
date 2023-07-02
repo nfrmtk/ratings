@@ -10,7 +10,7 @@ from testsuite.databases import pgsql
 
 form = {
     'email': 'vasya@mail.ru',
-    'password': 'vasya123',
+    'password': 'hG6x7RxcwqXZbDyC',
     'username': 'bigboy300',
 }
 
@@ -40,20 +40,42 @@ def data_email_password_username(form):
     return data
 
 
-async def register(service_client):
-    return await service_client.post(
-        '/v1/register',
-        data=data_email_password_username(form)
-    )
-
-
 async def test_register(service_client):
-    response = await register(service_client)
+    good_form = form.copy()
+    response = await service_client.post(
+        '/v1/register',
+        data=data_email_password_username(good_form)
+    )
     assert response.status == 200
 
 
+async def test_register_bad_password(service_client):
+    bad_form = form.copy()
+    bad_form['password'] = 'vasya'
+    response = await service_client.post(
+        '/v1/register',
+        data=data_email_password_username(bad_form)
+    )
+    assert response.status == 400
+
+
+async def test_register_bad_email(service_client):
+    bad_form = form.copy()
+    bad_form['email'] = 'vasya@mail.r'
+    response = await service_client.post(
+        '/v1/register',
+        data=data_email_password_username(bad_form)
+    )
+    assert response.status == 400
+
+
 async def test_login(service_client):
-    await register(service_client)
+    good_form = form.copy()
+    response = await service_client.post(
+        '/v1/register',
+        data=data_email_password_username(good_form)
+    )
+    assert response.status == 200
     response = await service_client.post(
         '/v1/login',
         data=data_email_and_password(form['email'], form['password'])

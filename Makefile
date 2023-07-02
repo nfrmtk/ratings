@@ -37,6 +37,7 @@ build-debug build-release: build-%: cmake-%
 # Test
 .PHONY: test-debug test-release
 test-debug test-release: test-%: build-%
+	@cmake --build build_$* -j $(NPROCS) --target ratings_service_unittest
 	@cd build_$* && ((test -t 1 && GTEST_COLOR=1 PYTEST_ADDOPTS="--color=yes" ctest -V) || ctest -V)
 	@pep8 tests
 
@@ -68,6 +69,7 @@ install: install-release
 .PHONY: format
 format:
 	@find src -name '*pp' -type f | xargs $(CLANG_FORMAT) -i
+	@find unittests -name '*pp' -type f | xargs $(CLANG_FORMAT) -i
 	@find tests -name '*.py' -type f | xargs autopep8 -i
 
 # Internal hidden targets that are used only in docker environment

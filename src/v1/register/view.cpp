@@ -9,6 +9,7 @@
 #include <userver/server/request/request_context.hpp>
 #include <userver/storages/postgres/cluster.hpp>
 #include <userver/storages/postgres/component.hpp>
+#include "../../lib/validation.hpp"
 namespace ratings_service {
 namespace {
 namespace pg = userver::storages::postgres;
@@ -27,17 +28,19 @@ class Register : public userver::server::handlers::HttpHandlerBase {
   std::string HandleRequestThrow(
       const userver::server::http::HttpRequest& request,
       userver::server::request::RequestContext&) const override {
-    if (!request.HasFormDataArg("email") ||
-        !request.HasFormDataArg("password")) {
+    if (!request.HasFormDataArg("password") ||
+        !ratings_service::isPasswordStrong(
+            request.GetFormDataArg("password").value) ||
+        !request.HasFormDataArg("email") ||
+        !ratings_service::isEmailCorrect(
+            request.GetFormDataArg("email").value)) {
       request.GetHttpResponse().SetStatus(
           userver::server::http::HttpStatus::kBadRequest);
       return {};
     }
-    auto email = request.GetFormDataArg("email")
-                     .value;  // todo: check if email is correct
-    auto passwd_hash = userver::crypto::hash::Sha256(
-        request.GetFormDataArg("password")
-            .value);  // todo: check is password is bad
+    auto email = request.GetFormDataArg("email").value;
+    auto passwd_hash =
+        userver::crypto::hash::Sha256(request.GetFormDataArg("password").value);
     auto username = request.GetFormDataArg("username").value;
     auto result =
         pg_cluster_->Execute(pg::ClusterHostType::kMaster,
