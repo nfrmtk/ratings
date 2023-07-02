@@ -41,7 +41,7 @@ def data_email_password_username(form):
 
 
 async def test_register(service_client):
-    good_form = form
+    good_form = form.copy()
     response = await service_client.post(
         '/v1/register',
         data=data_email_password_username(good_form)
@@ -50,7 +50,7 @@ async def test_register(service_client):
 
 
 async def test_register_bad_password(service_client):
-    bad_form = form
+    bad_form = form.copy()
     bad_form['password'] = 'vasya'
     response = await service_client.post(
         '/v1/register',
@@ -59,7 +59,7 @@ async def test_register_bad_password(service_client):
     assert response.status == 400
 
 async def test_register_bad_email(service_client):
-    bad_form = form
+    bad_form = form.copy()
     bad_form['email'] = 'vasya@mail.r'
     response = await service_client.post(
         '/v1/register',
@@ -67,7 +67,7 @@ async def test_register_bad_email(service_client):
     )
     assert response.status == 400
 async def test_login(service_client):
-    good_form = form
+    good_form = form.copy()
     response = await service_client.post(
         '/v1/register',
         data=data_email_password_username(good_form)
