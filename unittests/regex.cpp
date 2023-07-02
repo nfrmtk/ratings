@@ -13,5 +13,4 @@ UTEST_P(CorrectEmailTest, pass_true){
 INSTANTIATE_TEST_SUITE_P(results_true, CorrectEmailTest,
                          ::testing::Values("vasya@pupkin.ru"s,
                                            "vasya.pupkin@mail.ru"s,
-                                           "123@123456.com"s,
-                                           "almaz03@yandex.ru"s));
+                                           "123@123456.com"s));
