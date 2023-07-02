@@ -6,7 +6,7 @@ C++ CRUD service that uses [userver framework](https://github.com/userver-framew
 Basic features are described [here](./openai.yaml)
 
 ## TODO
-1. email/password validity/strogness check
+1. ~email/password validity/strogness check~ DONE
 2. ~'sign out' handler~ DONE
 3. proper auth handling for more than 1 device per single user.
 4. openapi
