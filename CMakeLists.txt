@@ -6,7 +6,6 @@ include(GNUInstallDirs)
 
 add_subdirectory(third_party/userver)
 
-
 # Common sources
 add_library(${PROJECT_NAME}_objs OBJECT
 		src/v1/post-a-review/view.cpp
@@ -29,7 +28,8 @@ add_library(${PROJECT_NAME}_objs OBJECT
 		src/v1/log-out/view.hpp
 		src/lib/validation.cpp
 		src/lib/validation.hpp)
-target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver-core userver-postgresql)
+find_package(Boost REQUIRED COMPONENTS regex	)
+target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver-core userver-postgresql Boost::regex)
 
 
 # The Service
@@ -37,7 +37,7 @@ add_executable(${PROJECT_NAME} src/main.cpp)
 target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_objs)
 
 add_executable(${PROJECT_NAME}_unittest
-		unittests/regex.cpp
+		unittests/validation.cpp
 		)
 target_link_libraries(${PROJECT_NAME}_unittest PRIVATE ${PROJECT_NAME}_objs userver-utest)
 add_google_tests(${PROJECT_NAME}_unittest)
