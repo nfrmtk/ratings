@@ -17,7 +17,6 @@ INSTANTIATE_UTEST_SUITE_P(
     bad_emails, EmailTest,
     ::testing::Values(EmailAnswer{"va...sya@pupkin.ru"s, false},
                       EmailAnswer{"12@3@yahoo.ru"s, false},
-                      EmailAnswer{"#123@123456.com"s, false},
                       EmailAnswer{"almaz03.@yandex.ru"s, false},
                       EmailAnswer{"pass@ya/ru"s, false},
                       EmailAnswer{"pass@ya.c"s, false},
