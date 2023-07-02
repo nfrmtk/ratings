@@ -38,11 +38,9 @@ class Register : public userver::server::handlers::HttpHandlerBase {
           userver::server::http::HttpStatus::kBadRequest);
       return {};
     }
-    auto email = request.GetFormDataArg("email")
-                     .value;
-    auto passwd_hash = userver::crypto::hash::Sha256(
-        request.GetFormDataArg("password")
-            .value);
+    auto email = request.GetFormDataArg("email").value;
+    auto passwd_hash =
+        userver::crypto::hash::Sha256(request.GetFormDataArg("password").value);
     auto username = request.GetFormDataArg("username").value;
     auto result =
         pg_cluster_->Execute(pg::ClusterHostType::kMaster,
