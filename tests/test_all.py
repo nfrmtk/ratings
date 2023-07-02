@@ -67,6 +67,12 @@ async def test_register_bad_email(service_client):
     )
     assert response.status == 400
 async def test_login(service_client):
+    good_form = form
+    response = await service_client.post(
+        '/v1/register',
+        data=data_email_password_username(good_form)
+    )
+    assert response.status == 200
     response = await service_client.post(
         '/v1/login',
         data=data_email_and_password(form['email'], form['password'])
