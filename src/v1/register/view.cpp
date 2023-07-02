@@ -39,10 +39,10 @@ class Register : public userver::server::handlers::HttpHandlerBase {
       return {};
     }
     auto email = request.GetFormDataArg("email")
-                     .value;  // todo: check if email is correct
+                     .value;
     auto passwd_hash = userver::crypto::hash::Sha256(
         request.GetFormDataArg("password")
-            .value);  // todo: check is password is bad
+            .value);
     auto username = request.GetFormDataArg("username").value;
     auto result =
         pg_cluster_->Execute(pg::ClusterHostType::kMaster,
