@@ -8,9 +8,7 @@ Basic features are described [here](./openai.yaml)
 ## TODO
 1. ~email/password validity/strogness check~ DONE
 2. ~'sign out' handler~ DONE
-3. proper auth handling for more than 1 device per single user.
-4. openapi
-
+3. different roles
 ## Download and Build
 
 To create your own userver-based service follow the following steps:
