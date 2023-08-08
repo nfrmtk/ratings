@@ -27,7 +27,7 @@ jobs:
   push:
     needs: run-check
     name: push
-    if: needs.run-check.outputs.pr_number_opt != 'bad-commit'
+    if: ${{ needs.run-check.outputs.pr_number_opt }} != 'bad-commit'
     runs-on: ubuntu-latest
     steps:
       -
