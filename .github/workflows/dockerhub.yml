@@ -13,7 +13,7 @@ jobs:
         id: check
         #check if last commit message has correct naming, containing '(#NUMBERS)', e.g. https://github.com/nfrmtk/ratings/commit/e78c8e93d42cf16953d341ed2c4364f7194c3540
         run: |
-          status = $(echo '${{ github.event.commits[0].message }}' | python3 pr_number_or_bad_commit.py)
+          status=$(echo '${{ github.event.commits[0].message }}' | python3 pr_number_or_bad_commit.py)
           echo "::set-output name=pr_numer_opt::${status}"
 
   push:
