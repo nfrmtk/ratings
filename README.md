@@ -9,6 +9,7 @@ Basic features are described [here](./openai.yaml)
 1. ~email/password validity/strogness check~ DONE
 2. ~'sign out' handler~ DONE
 3. different roles
+4. hub.docker.com push on every succesfull merge
 ## Download and Build
 
 To create your own userver-based service follow the following steps:
