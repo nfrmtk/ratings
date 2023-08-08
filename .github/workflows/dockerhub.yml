@@ -7,7 +7,7 @@ jobs:
   run-check:
     runs-on: ubuntu-latest
     outputs:
-      pr_numer_opt: ${{ steps.check.outputs.pr_numer_opt }}
+      pr_number_opt: ${{ steps.check.outputs.pr_number_opt }}
     steps:
       - name: checkout repo content
         uses: actions/checkout@v2 # checkout the repository content
@@ -21,8 +21,8 @@ jobs:
         id: check
         #check if last commit message has correct naming, containing '(#NUMBERS)', e.g. https://github.com/nfrmtk/ratings/commit/e78c8e93d42cf16953d341ed2c4364f7194c3540
         run: |
-          status=$(echo '${{ github.event.commits[0].message }}' | python pr_number_or_bad_commit.py)
-          echo "::set-output name=pr_numer_opt::${status}"
+          pr_number_opt=$(echo '${{ github.event.commits[0].pr_number_opt }}' | python pr_number_or_bad_commit.py)
+          echo "::set-output name=pr_numer_opt::${pr_number_opt}"
 
   push:
     needs: run-check
