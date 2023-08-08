@@ -9,11 +9,16 @@ jobs:
     outputs:
       pr_numer_opt: ${{ steps.check.outputs.pr_numer_opt }}
     steps:
+      - name: setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10' # install the python version needed
+
       - name: Check if commit is a result of a merged pull request
         id: check
         #check if last commit message has correct naming, containing '(#NUMBERS)', e.g. https://github.com/nfrmtk/ratings/commit/e78c8e93d42cf16953d341ed2c4364f7194c3540
         run: |
-          status=$(echo '${{ github.event.commits[0].message }}' | python3 pr_number_or_bad_commit.py)
+          status=$(echo '${{ github.event.commits[0].message }}' | python pr_number_or_bad_commit.py)
           echo "::set-output name=pr_numer_opt::${status}"
 
   push:
