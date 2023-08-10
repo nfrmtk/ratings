@@ -1,3 +1,2 @@
 FROM postgres:12
-COPY . .
-VOLUME ./postgresql/schemas:/docker-entrypoint-initdb.d ./.pgdata:/var/lib/postgresql/data
+ADD ./postgresql/schemas/db_1.sql /docker-entrypoint-initdb.d/
