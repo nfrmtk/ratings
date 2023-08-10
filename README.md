@@ -3,7 +3,7 @@
 C++ CRUD service that uses [userver framework](https://github.com/userver-framework/userver) with PostgreSQL.
 
 ## Features
-Basic features are described [here](./openai.yaml)
+Basic features are described [here](./openapi.yaml)
 
 ## TODO
 1. ~email/password validity/strogness check~ DONE
