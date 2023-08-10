@@ -24,7 +24,7 @@ jobs:
       -
         name: Build and push service
         uses: docker/build-push-action@v4
-        if: github.ref != 'refs/heads/feature/better-docker'
+#        if: github.ref != 'refs/heads/feature/better-docker'
         with:
           context: .
           file: ./Dockerfile
