@@ -8,18 +8,16 @@ Basic features are described [here](./openapi.yaml)
 ## TODO
 1. ~email/password validity/strogness check~ DONE
 2. ~'sign out' handler~ DONE
-3. different roles
-4. ~hub.docker.com push on every succesfull merge~ almost done, dockerhub push on every succesfull release branch push
+3. ~hub.docker.com push on every succesfull merge~ almost done, dockerhub push on every succesfull release branch push
 ## Download and Build
 
-To create your own userver-based service follow the following steps:
-
-1. Press the green "Use this template button" at the top of this github page
-2. Clone the service `git clone your-service-repo && cd your-service-repo`
-3. Give a propper name to your service and replace all the occurences of "ratings_service" string with that name
-   (could be done via `find . -not -path "./third_party/*" -not -path ".git/*" -not -path './build_*' -type f | xargs sed -i 's/ratings_service/YOUR_SERVICE_NAME/g'`).
-4. Feel free to tweak, adjust or fully rewrite the source code of your service.
-
+```shell
+git clone https://github.com/nfrmtk/ratings
+cd ratings
+git submodule update --init
+make tests
+make docker-start-service-release
+```
 
 ## Makefile
 
