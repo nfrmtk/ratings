@@ -208,3 +208,38 @@ async def test_log_out(service_client):
         headers=header
     )
     assert response.status == 401
+
+@pytest.mark.pgsql('db_1', files=['initial_data_signed_with_unicode_reviews.sql'])
+async def test_get_unicode(service_client):
+    emote = u'🥳'
+    response = await service_client.get(
+        '/v1/reviews',
+        params={
+            'game': 'gta',
+            'email': 'vasya@mail.ru'
+        }
+    )
+    assert response.status == 200
+    assert emote in response.json()[0]['text']
+
+@pytest.mark.pgsql('db_1', files=['initial_data_signed.sql'])
+async def test_post_unicode(service_client, pgsql):
+    review = '🥳😳🫨'
+    response = await service_client.post(
+        '/v1/review',
+        json={
+            'game': 'gta5',
+            'rating': 10,
+            "text": review
+        },
+        headers=header
+    )
+    assert response.status == 200
+    cursor = pgsql['db_1'].cursor()
+    cursor.execute('SELECT * FROM ratings_schema.reviews;')
+    rows = list(cursor)
+    assert len(rows) == 1
+    row = rows[0]
+    assert review == row[3]
+
+
