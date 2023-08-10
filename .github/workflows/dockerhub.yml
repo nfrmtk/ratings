@@ -2,8 +2,6 @@ on:
   push:
     branches:
       - release
-      - feature/docker
-      - feature/better-docker
 jobs:
   push:
     name: push
