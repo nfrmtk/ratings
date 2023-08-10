@@ -209,7 +209,10 @@ async def test_log_out(service_client):
     )
     assert response.status == 401
 
-@pytest.mark.pgsql('db_1', files=['initial_data_signed_with_unicode_reviews.sql'])
+
+@pytest.mark.pgsql('db_1', files=[
+    'initial_data_signed_with_unicode_reviews.sql'
+])
 async def test_get_unicode(service_client):
     emote = u'🥳'
     response = await service_client.get(
@@ -221,6 +224,7 @@ async def test_get_unicode(service_client):
     )
     assert response.status == 200
     assert emote in response.json()[0]['text']
+
 
 @pytest.mark.pgsql('db_1', files=['initial_data_signed.sql'])
 async def test_post_unicode(service_client, pgsql):
@@ -241,5 +245,3 @@ async def test_post_unicode(service_client, pgsql):
     assert len(rows) == 1
     row = rows[0]
     assert review == row[3]
-
-
