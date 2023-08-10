@@ -1,0 +1,2 @@
+FROM postgres:12
+VOLUME ./postgresql/schemas:/docker-entrypoint-initdb.d ./.pgdata:/var/lib/postgresql/data
