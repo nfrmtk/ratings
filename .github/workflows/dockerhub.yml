@@ -3,6 +3,7 @@ on:
     branches:
       - release
       - feature/docker
+      - feature/better-docker
 jobs:
   push:
     name: push
@@ -21,11 +22,20 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
-        name: Build and push
+        name: Build and push service
+        uses: docker/build-push-action@v4
+#        if: github.ref != 'refs/heads/feature/better-docker'
+        with:
+          context: .
+          file: ./docker/service
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/ratings:latest
+      -
+        name: Build and push postgres
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: ./Dockerfile
+          file: ./docker/postgres-with-schema
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/ratings:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/ratings-postgres:latest
 
