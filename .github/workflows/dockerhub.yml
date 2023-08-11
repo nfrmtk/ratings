@@ -25,7 +25,7 @@ jobs:
 #        if: github.ref != 'refs/heads/feature/better-docker'
         with:
           context: .
-          file: ./docker/service
+          file: ./docker/service/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/ratings:latest
       -
@@ -33,7 +33,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: ./docker/postgres-with-schema
+          file: ./docker/postgres/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/ratings-postgres:latest
 
