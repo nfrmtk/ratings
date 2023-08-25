@@ -1,2 +1,2 @@
 FROM postgres:12
-ADD ../postgresql/schemas/db_1.sql /docker-entrypoint-initdb.d/
+COPY ../../postgresql/schemas/db_1.sql /docker-entrypoint-initdb.d/

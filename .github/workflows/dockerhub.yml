@@ -24,6 +24,7 @@ jobs:
         uses: docker/build-push-action@v4
 #        if: github.ref != 'refs/heads/feature/better-docker'
         with:
+          platforms: linux/amd64,linux/arm64
           context: .
           file: ./docker/service/Dockerfile
           push: true
@@ -31,7 +32,9 @@ jobs:
       -
         name: Build and push postgres
         uses: docker/build-push-action@v4
+
         with:
+          platforms: linux/amd64,linux/arm64
           context: .
           file: ./docker/postgres/Dockerfile
           push: true
