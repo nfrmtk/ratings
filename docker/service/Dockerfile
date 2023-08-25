@@ -2,7 +2,7 @@ FROM ghcr.io/userver-framework/ubuntu-userver-build-base:v1
 LABEL authors="nfrmtk"
 
 WORKDIR /tmp
-COPY .. .
+COPY ../.. .
 ENV PREFIX=${PREFIX:-~/.local}
 RUN make install
 WORKDIR /
