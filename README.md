@@ -9,7 +9,7 @@ Basic features are described [here](./openapi.yaml)
 1. ~email/password validity/strogness check~ DONE
 2. ~'sign out' handler~ DONE
 3. ~hub.docker.com push on every succesfull merge~ almost done, dockerhub push on every succesfull release branch push
-4. nginx support
+4. ~nginx support~
 ## Download and Build
 
 ```shell
